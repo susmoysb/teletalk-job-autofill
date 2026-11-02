@@ -1,0 +1,20 @@
+{
+  "name": "teletalk-autofill",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fill Teletalk (alljobs.teletalk.com.bd) job application forms from a saved profile. Never submits or pays.",
+  "main": "fill.js",
+  "scripts": {
+    "fill": "node fill.js",
+    "test": "node fill.js test/form.html --profile test/profile.json --auto && node test/lists.js && node test/cases.js && node test/extension.js",
+    "ext:build": "node scripts/build.js",
+    "ext:sign": "web-ext sign --source-dir extension --artifacts-dir dist --channel unlisted",
+    "lists": "node scripts/form-lists.js"
+  },
+  "dependencies": {
+    "playwright": "^1.47.0"
+  },
+  "devDependencies": {
+    "web-ext": "^8.0.0"
+  }
+}

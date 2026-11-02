@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Test Application Form</title>
+<!--
+  Offline stand-in for a Teletalk application form, used by `npm test`.
+  Mimics the real layout: label cell | ":" | control cell tables, cascading
+  district -> upazila selects, day/month/year date selects, a GPA box that only
+  appears once a GPA result is chosen, and a "same as present" checkbox.
+-->
+<style>
+  body { font: 14px sans-serif; margin: 20px; }
+  h3 { background: #dfe8f1; padding: 4px 8px; }
+  td { padding: 3px 6px; }
+  .req { color: red; }
+  .hide { display: none; }
+</style>
+</head>
+<body>
+<form id="app" onsubmit="window.submitted = true; return false;">
+
+<p>Post Name <span class="req">*</span> :
+  <select name="post"><option value="">Select Post</option><option>Assistant Programmer</option>
+  <option>Office Assistant</option><option>Computer Operator</option></select></p>
+
+<h3>Personal Information</h3>
+<table>
+  <tr><td>Name (English) <span class="req">*</span></td><td>:</td><td><input name="name_en"></td></tr>
+  <tr><td>Name (Bangla) <span class="req">*</span></td><td>:</td><td><input name="name_bn"></td></tr>
+  <tr><td>Father's Name (English)</td><td>:</td><td><input name="father_en"></td></tr>
+  <tr><td>Father's Name (Bangla)</td><td>:</td><td><input name="father_bn"></td></tr>
+  <tr><td>Mother's Name (English)</td><td>:</td><td><input name="mother_en"></td></tr>
+  <tr><td>Mother's Name (Bangla)</td><td>:</td><td><input name="mother_bn"></td></tr>
+  <tr><td>Date of Birth <span class="req">*</span></td><td>:</td><td>
+    <select name="dob_day" id="dob_day"><option value="">Day</option></select>
+    <select name="dob_month" id="dob_month"><option value="">Month</option></select>
+    <select name="dob_year" id="dob_year"><option value="">Year</option></select>
+  </td></tr>
+  <tr><td>Gender</td><td>:</td><td>
+    <label><input type="radio" name="gender" value="M"> Male</label>
+    <label><input type="radio" name="gender" value="F"> Female</label>
+    <label><input type="radio" name="gender" value="O"> Third Gender</label>
+  </td></tr>
+  <tr><td>Religion</td><td>:</td><td><select name="religion">
+    <option value="">Select One</option><option>Islam</option><option>Hinduism</option>
+    <option>Buddhism</option><option>Christianity</option><option>Others</option>
+  </select></td></tr>
+  <tr><td>Nationality</td><td>:</td><td><input name="nationality"></td></tr>
+  <tr><td>National ID</td><td>:</td><td>
+    <select name="has_nid" class="reveal"><option value="">Select</option><option value="1">Yes</option><option value="0">No</option></select>
+    <input name="nid" class="hide" placeholder="NID number">
+  </td></tr>
+  <tr><td>Birth Registration No.</td><td>:</td><td><input name="brn"></td></tr>
+  <tr><td>Passport ID</td><td>:</td><td>
+    <select name="has_passport" class="reveal"><option value="">Select</option><option value="1">Yes</option><option value="0">No</option></select>
+    <input name="passport" class="hide">
+  </td></tr>
+  <tr><td>Marital Status</td><td>:</td><td><select name="marital">
+    <option value="">Select One</option><option>Single</option><option>Married</option>
+    <option>Divorced</option><option>Widowed</option>
+  </select></td></tr>
+  <tr><td>Mobile No.</td><td>:</td><td><input name="mobile"></td></tr>
+  <tr><td>Confirm Mobile No.</td><td>:</td><td><input name="mobile2"></td></tr>
+  <tr><td>Email</td><td>:</td><td><input name="email" type="email"></td></tr>
+  <tr><td>Quota</td><td>:</td><td><select name="quota">
+    <option value="">Select One</option><option>Child of Freedom Fighter</option><option>Child of Martyred Freedom Fighter</option>
+    <option>Not Applicable</option>
+    <option>Ethnic Minority</option><option>Physically Handicapped</option>
+  </select></td></tr>
+  <tr><td>Departmental Candidate</td><td>:</td><td>
+    <label><input type="radio" name="dept" value="Y"> Yes</label>
+    <label><input type="radio" name="dept" value="N"> No</label>
+  </td></tr>
+  <tr><td>Home District</td><td>:</td><td><select name="home_district" class="districts"></select></td></tr>
+</table>
+
+<h3>Present Address</h3>
+<table>
+  <tr><td>Care of</td><td>:</td><td><input name="pr_careof"></td></tr>
+  <tr><td>Village/Town/Road/House/Flat</td><td>:</td><td><input name="pr_village"></td></tr>
+  <tr><td>District</td><td>:</td><td><select name="pr_district" class="districts" data-upazila="pr_upazila"></select></td></tr>
+  <tr><td>Upazila/P.S.</td><td>:</td><td><select name="pr_upazila" id="pr_upazila"><option value="">Select Upazila</option></select></td></tr>
+  <tr><td>Post Office</td><td>:</td><td><input name="pr_po"></td></tr>
+  <tr><td>Post Code</td><td>:</td><td><input name="pr_pc"></td></tr>
+</table>
+
+<p><label><input type="checkbox" id="same"> Permanent address same as present address</label></p>
+
+<h3>Permanent Address</h3>
+<table>
+  <tr><td>Care of</td><td>:</td><td><input name="pm_careof" class="perm"></td></tr>
+  <tr><td>Village/Town/Road/House/Flat</td><td>:</td><td><input name="pm_village" class="perm"></td></tr>
+  <tr><td>District</td><td>:</td><td><select name="pm_district" class="districts perm" data-upazila="pm_upazila"></select></td></tr>
+  <tr><td>Upazila/P.S.</td><td>:</td><td><select name="pm_upazila" id="pm_upazila" class="perm"><option value="">Select Upazila</option></select></td></tr>
+  <tr><td>Post Office</td><td>:</td><td><input name="pm_po" class="perm"></td></tr>
+  <tr><td>Post Code</td><td>:</td><td><input name="pm_pc" class="perm"></td></tr>
+</table>
+
+<h3>Educational Qualification</h3>
+<div id="edu"></div>
+
+<p><input type="checkbox" id="has-exp"> <i>If Applicable</i></p>
+<h3>Job Experience</h3>
+<table id="exp">
+  <tr><th>SL</th><th>Designation</th><th>Organization</th><th>Employed on*</th><th>Address*</th><th>Responsibilities</th>
+    <th>From (dd/mm/yyyy)</th><th>To (dd/mm/yyyy)</th><th>Continuing</th></tr>
+</table>
+
+<h3>Photo and Signature</h3>
+<table>
+  <tr><td>Photo (300x300 px, max 100KB)</td><td>:</td><td><input type="file" name="photo" accept="image/*"></td></tr>
+  <tr><td>Signature (300x80 px, max 60KB)</td><td>:</td><td><input type="file" name="sign" accept="image/*"></td></tr>
+</table>
+
+<p>Enter the characters shown: <b>X7K2Q</b> <input name="captcha"></p>
+<p><button type="submit">Submit</button></p>
+</form>
+
+<script>
+const $ = (s, r = document) => r.querySelector(s);
+const opts = (sel, list, placeholder) => {
+  sel.innerHTML = placeholder === undefined ? '' : `<option value="">${placeholder}</option>`;
+  for (const o of list) sel.add(new Option(o, o));
+};
+const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
+
+opts($('#dob_day'), range(1, 31).map(String), 'Day');
+opts($('#dob_month'), ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+  'September', 'October', 'November', 'December'], 'Month');
+opts($('#dob_year'), range(1970, 2008).reverse().map(String), 'Year');
+
+const UPAZILAS = {
+  Dhaka: ['Dhamrai', 'Dohar', 'Keraniganj', 'Nawabganj', 'Savar'],
+  Rajshahi: ['Bagha', 'Bagmara', 'Charghat', 'Godagari', 'Paba', 'Puthia'],
+  Chattogram: ['Anwara', 'Hathazari', 'Patiya', 'Sitakunda'],
+  Khulna: ['Batiaghata', 'Dumuria', 'Rupsha'],
+};
+for (const sel of document.querySelectorAll('.districts')) {
+  opts(sel, Object.keys(UPAZILAS), 'Select District');
+  const target = sel.dataset.upazila && document.getElementById(sel.dataset.upazila);
+  if (!target) continue;
+  // Like the real site: upazilas arrive a moment after the district changes.
+  sel.addEventListener('change', () => {
+    opts(target, [], 'Select Upazila');
+    setTimeout(() => opts(target, UPAZILAS[sel.value] || [], 'Select Upazila'), 300);
+  });
+}
+
+// Yes/No questions that reveal the number box only after "Yes" (like NID on the real form).
+for (const sel of document.querySelectorAll('.reveal')) {
+  sel.addEventListener('change', () => sel.nextElementSibling.classList.toggle('hide', sel.value !== '1'));
+}
+
+// The real form's "Employed on" options.
+const EMPLOYED_ON = ['Regular Basis Under Revenue Budget', 'Ad-hoc Basis Under Revenue Budget', 'Temporary Basis Under Revenue Budget',
+  'Work Charged Basis Under Revenue Budget', 'Temporary Basis Under Development Project', 'Work Charged Basis Under Development Project',
+  'Autonomous/Semi Autonomous Organization', 'Private Organization', 'Business/Self Employed'];
+
+// Job experience: three rows, locked until "If Applicable" is ticked;
+// "Continuing" locks that row's end date.
+for (let r = 1; r <= 3; r++) {
+  const tr = $('#exp').insertRow();
+  tr.innerHTML = `<td>${r}</td><td><input name="exp${r}_designation"></td><td><input name="exp${r}_org"></td>
+    <td><select name="job[${r - 1}][employment_type]"><option value="">Select</option>${EMPLOYED_ON.map((o) => `<option>${o}</option>`).join('')}</select></td>
+    <td><input name="job[${r - 1}][office_address]"></td>
+    <td><textarea name="exp${r}_resp" rows="1"></textarea></td><td><input name="exp${r}_from" size="10"></td>
+    <td><input name="exp${r}_to" size="10"></td><td><input type="checkbox" name="exp${r}_cont"></td>`;
+  $(`[name=exp${r}_cont]`).addEventListener('change', (e) => { $(`[name=exp${r}_to]`).disabled = e.target.checked; });
+}
+const lockExp = (on) => document.querySelectorAll('#exp input, #exp textarea, #exp select').forEach((e) => { e.disabled = on; });
+lockExp(true);
+$('#has-exp').addEventListener('change', (e) => lockExp(!e.target.checked));
+
+$('#same').addEventListener('change', (e) => {
+  for (const el of document.querySelectorAll('.perm')) el.disabled = e.target.checked;
+});
+
+const LEVELS = [
+  { key: 'ssc', title: 'SSC / Equivalent Level', exams: ['S.S.C', 'Dakhil', 'S.S.C Vocational', 'O Level'] },
+  { key: 'hsc', title: 'HSC / Equivalent Level', exams: ['H.S.C', 'Alim', 'Business Management', 'Diploma', 'A Level'] },
+  { key: 'grad', title: 'Graduation / Equivalent Level',
+    exams: ['B.Sc (Engineering/Architecture)', 'B.Sc (Agricultural Science)', 'M.B.B.S/B.D.S', 'Honors', 'Pass Course', 'Fazil'] },
+  { key: 'mast', title: 'Masters / Equivalent Level', exams: ['M.Sc (Engineering/Architecture)', 'M.Sc', 'M.A', 'M.S.S', 'Masters', 'M.B.A', 'Kamil'] },
+];
+const BOARDS = ['Barishal', 'Chattogram', 'Cumilla', 'Dhaka', 'Dinajpur', 'Jashore', 'Madrasah', 'Rajshahi', 'Sylhet', 'Technical'];
+const SCHOOL_RESULTS = ['First Division', 'Second Division', 'Third Division', 'GPA(out of 4)', 'GPA(out of 5)'];
+const UNI_RESULTS = ['First Class', 'Second Class', 'Third Class', 'CGPA(out of 4)', 'CGPA(out of 5)'];
+const SUBJECTS = ['Computer Science and Engineering', 'Electrical and Electronic Engineering', 'Civil Engineering', 'Physics', 'Economics'];
+const INSTITUTES = ['University of Dhaka', 'University of Rajshahi', 'Bangladesh University of Engineering and Technology (BUET)', 'Rajshahi University of Engineering and Technology (RUET)'];
+
+for (const lv of LEVELS) {
+  const school = lv.key === 'ssc' || lv.key === 'hsc';
+  const rows = [
+    ['Examination', `<select name="${lv.key}_exam" data-list="exams"></select>`],
+    ...(school
+      ? [['Board', `<select name="${lv.key}_board" data-list="boards"></select>`], ['Roll No.', `<input name="${lv.key}_roll">`]]
+      : [['Subject', `<select name="${lv.key}_subject" data-list="subjects"></select>`],
+         ['University/Institute', `<select name="${lv.key}_inst" data-list="institutes"></select>`]]),
+    ['Result', `<select name="${lv.key}_result" data-list="results"></select>
+      <span class="hide gpabox">GPA/CGPA <input name="${lv.key}_gpa" size="5"></span>`],
+    ...(school ? [['Group/Subject', `<select name="${lv.key}_group" data-list="groups"></select>`]] : []),
+    ['Passing Year', `<select name="${lv.key}_year" data-list="years"></select>`],
+    ...(school ? [] : [['Course Duration', `<select name="${lv.key}_duration" data-list="durations"></select>`]]),
+  ];
+  const box = document.createElement('div');
+  if (lv.key !== 'mast') {
+    box.innerHTML = `<h4>${lv.title}</h4><table>${rows.map(([l, c]) => `<tr><td>${l}</td><td>:</td><td>${c}</td></tr>`).join('')}</table>`;
+  } else {
+    // Like the real form: an "If Applicable" box above the heading, two columns,
+    // and every field locked until the box is ticked.
+    const cell = (i) => `<td><b>${rows[i][0]}</b></td><td>${rows[i][1]}</td>`;
+    rows[1][0] = 'Subject/Degree';
+    rows[2][0] = 'University/Inst.';
+    box.innerHTML = '<p><input type="checkbox" class="has-level"> <i>If Applicable</i></p>' +
+      `<h4>${lv.title.replace(' / ', '/')}</h4><table>` +
+      `<tr>${cell(0)}${cell(1)}</tr><tr>${cell(2)}${cell(3)}</tr><tr>${cell(4)}${cell(5)}</tr></table>`;
+    const lock = (on) => box.querySelectorAll('table select, table input').forEach((e) => { e.disabled = on; });
+    lock(true);
+    $('.has-level', box).addEventListener('change', (e) => lock(!e.target.checked));
+  }
+  $('#edu').appendChild(box);
+  const lists = {
+    exams: lv.exams, boards: BOARDS, subjects: SUBJECTS, institutes: INSTITUTES,
+    results: school ? SCHOOL_RESULTS : UNI_RESULTS, groups: ['Science', 'Humanities', 'Business Studies', 'Others'],
+    years: range(1990, 2026).reverse().map(String), durations: ['01 Year', '02 Years', '03 Years', '04 Years', '05 Years'],
+  };
+  for (const sel of box.querySelectorAll('select')) opts(sel, lists[sel.dataset.list], 'Select');
+  const result = box.querySelector(`[name="${lv.key}_result"]`);
+  result.addEventListener('change', () => {
+    box.querySelector('.gpabox').classList.toggle('hide', !/gpa/i.test(result.value));
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+{
+  "nameEn": "MD. EXAMPLE RAHMAN",
+  "nameBn": "মোঃ উদাহরণ রহমান",
+  "fatherEn": "MD. FATHER RAHMAN",
+  "fatherBn": "মোঃ পিতা রহমান",
+  "motherEn": "MST. MOTHER BEGUM",
+  "motherBn": "মোছাঃ মাতা বেগম",
+  "dob": "1998-05-14",
+  "gender": "Male",
+  "religion": "Islam",
+  "nationality": "Bangladeshi",
+  "nid": "1234567890",
+  "birthReg": "",
+  "passport": "",
+  "maritalStatus": "Single",
+  "mobile": "01XXXXXXXXX",
+  "confirmMobile": "01XXXXXXXXX",
+  "email": "you@example.com",
+  "quota": "Not Applicable",
+  "departmentalStatus": "Not Applicable",
+  "present": {
+    "careOf": "MD. FATHER RAHMAN",
+    "village": "House 12, Road 3, Example Para",
+    "district": "Dhaka",
+    "upazila": "Savar",
+    "postOffice": "Savar",
+    "postCode": "1340"
+  },
+  "permanentSameAsPresent": true,
+  "permanent": {
+    "careOf": "MD. FATHER RAHMAN",
+    "village": "Example Village",
+    "district": "Rajshahi",
+    "upazila": "Paba",
+    "postOffice": "Naohata",
+    "postCode": "6213"
+  },
+  "ssc": {
+    "exam": "S.S.C",
+    "board": "Rajshahi",
+    "roll": "123456",
+    "result": "GPA(out of 5)",
+    "gpa": "5.00",
+    "group": "Science",
+    "year": "2014"
+  },
+  "hsc": {
+    "exam": "H.S.C",
+    "board": "Rajshahi",
+    "roll": "654321",
+    "result": "GPA(out of 5)",
+    "gpa": "5.00",
+    "group": "Science",
+    "year": "2016"
+  },
+  "graduation": {
+    "exam": "B.Sc (Engineering/Architecture)",
+    "subject": "Computer Science and Engineering",
+    "institute": "University of Dhaka",
+    "result": "CGPA(out of 4)",
+    "gpa": "3.50",
+    "year": "2021",
+    "duration": "04 Years"
+  },
+  "masters": {
+    "exam": "M.Sc",
+    "subject": "Computer Science and Engineering",
+    "institute": "University of Dhaka",
+    "result": "CGPA(out of 4)",
+    "gpa": "3.75",
+    "year": "2023",
+    "duration": "01 Year"
+  },
+  "jobs": [
+    {
+      "designation": "Software Engineer",
+      "organization": "Example Tech Ltd.",
+      "employmentType": "Private Organization",
+      "address": "House 10, Road 5, Gulshan, Dhaka",
+      "responsibilities": "Developing and maintaining web applications",
+      "from": "2021-07-01",
+      "continuing": true
+    },
+    {
+      "designation": "Junior Software Developer",
+      "organization": "Sample Soft Ltd.",
+      "employmentType": "Private Organization",
+      "address": "Plot 7, Road 2, Mirpur DOHS, Dhaka",
+      "responsibilities": "Building and testing internal business software",
+      "from": "2019-03-01",
+      "to": "2021-06-30",
+      "continuing": false
+    }
+  ],
+  "photo": "files/photo.jpg",
+  "signature": "files/signature.jpg"
+}

@@ -1,0 +1,62 @@
+{
+  "manifest_version": 3,
+  "name": "Teletalk Autofill",
+  "version": "1.14.3",
+  "description": "Unofficial helper: fills Teletalk job application forms from your saved profile in one click. Never submits or pays.",
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "action": {
+    "default_title": "Fill this application form",
+    "default_icon": {
+      "16": "icons/16.png",
+      "32": "icons/32.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.teletalk.com.bd/*"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "teletalk-autofill@local",
+      "strict_min_version": "121.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    },
+    "gecko_android": {
+      "strict_min_version": "121.0"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.teletalk.com.bd/*"
+      ],
+      "js": [
+        "detect.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

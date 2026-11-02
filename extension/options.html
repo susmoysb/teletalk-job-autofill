@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teletalk Autofill — Your details</title>
+<link rel="stylesheet" href="options.css">
+</head>
+<body>
+<div class="page">
+  <!-- Laid out like a Teletalk application form, so each answer sits where the form asks for it. -->
+  <header class="banner">
+    <img src="icons/48.png" alt="" class="logo">
+    <div>
+      <div class="banner-sub">Your details for Teletalk job applications</div>
+      <h1 class="banner-title">Teletalk Autofill</h1>
+      <div class="banner-note">Saved only in this browser · Nothing is ever submitted</div>
+    </div>
+  </header>
+
+  <nav class="menu" aria-label="Sections">
+    <a href="#basic">Basic Information</a>
+    <a href="#address">Address</a>
+    <a href="#education">Education</a>
+    <a href="#jobs">Job Experiences</a>
+    <a href="#uploads">Photo &amp; Signature</a>
+    <a href="#backup">Backup</a>
+    <button type="button" id="next-todo" hidden title="Go to the next detail still missing"></button>
+    <span id="status" role="status" aria-live="polite"></span>
+  </nav>
+
+  <main id="profile" class="sheet">
+    <p class="intro">Fill this in once, the way you would fill the application form. It saves as you type.
+      Then open a Teletalk application form, choose the post and click the extension's toolbar button.</p>
+
+    <div id="readiness" role="status" aria-live="polite"></div>
+
+    <fieldset class="box" id="basic">
+      <legend>Basic Information</legend>
+      <div class="rows" data-fields="basic"></div>
+    </fieldset>
+
+    <div id="address">
+      <div class="pair-head">
+        <span></span>
+        <label class="ifapp"><input type="checkbox" data-key="permanentSameAsPresent"> Same as Present Address</label>
+      </div>
+      <div class="pair">
+        <fieldset class="box">
+          <legend>Present Address (বর্তমান ঠিকানা)</legend>
+          <div class="rows" data-fields="present"></div>
+        </fieldset>
+        <fieldset class="box" id="permanent-box">
+          <legend>Permanent Address (স্থায়ী ঠিকানা)</legend>
+          <div class="rows" data-fields="permanent"></div>
+        </fieldset>
+      </div>
+    </div>
+
+    <div id="education">
+      <fieldset class="box">
+        <legend>SSC/Equivalent Level</legend>
+        <div class="cols" data-fields="ssc"></div>
+      </fieldset>
+      <fieldset class="box">
+        <legend>HSC/Equivalent Level</legend>
+        <div class="cols" data-fields="hsc"></div>
+      </fieldset>
+      <fieldset class="box">
+        <legend>Graduation/Equivalent Level</legend>
+        <div class="cols" data-fields="graduation"></div>
+      </fieldset>
+      <label class="ifapp"><input type="checkbox" data-toggle="masters"> If Applicable</label>
+      <fieldset class="box" data-gated="masters">
+        <legend>Masters/Equivalent Level</legend>
+        <div class="cols" data-fields="masters"></div>
+      </fieldset>
+    </div>
+
+    <div id="jobs">
+      <label class="ifapp"><input type="checkbox" data-toggle="jobs"> If Applicable</label>
+      <fieldset class="box" data-gated="jobs">
+        <legend>Job Experiences <button type="button" id="add-job" class="pill">⊕ ADD MORE</button></legend>
+        <p class="note">In the order the application form lists them, usually latest first. If the form shows one job at a time, the extension presses its ADD MORE for each next job.</p>
+        <div id="job-list"></div>
+      </fieldset>
+    </div>
+
+    <fieldset class="box" id="uploads">
+      <legend>Photo and Signature</legend>
+      <p class="note">Teletalk wants the photo at 300×300 px (max 100 KB) and the signature at 300×80 px
+        (max 60 KB), both JPG. If an image you choose doesn't fit, you can resize it here.</p>
+      <div class="uploads">
+        <div class="upload" data-key="photo" data-w="300" data-h="300" data-kb="100">
+          <div class="upload-title">Photo</div>
+          <div class="preview"><img alt="Saved photo"><span class="none">No photo saved</span></div>
+          <div class="info"></div>
+          <div class="row">
+            <label class="btn">Choose…<input type="file" accept="image/*" hidden></label>
+            <button type="button" class="btn light remove">Remove</button>
+          </div>
+        </div>
+        <div class="upload" data-key="signature" data-w="300" data-h="80" data-kb="60">
+          <div class="upload-title">Signature</div>
+          <div class="preview"><img alt="Saved signature"><span class="none">No signature saved</span></div>
+          <div class="info"></div>
+          <div class="row">
+            <label class="btn">Choose…<input type="file" accept="image/*" hidden></label>
+            <button type="button" class="btn light remove">Remove</button>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="box" id="backup">
+      <legend>Backup and Other Computers</legend>
+      <p class="note">Export puts your details, photo and signature in one file. On another computer, install the
+        extension and import that file. Delete the copy afterwards: it holds your NID and address.</p>
+      <div class="row center">
+        <button type="button" id="export" class="btn">Export backup</button>
+        <label class="btn">Import backup…<input type="file" id="import" accept=".json,application/json" hidden></label>
+      </div>
+      <details id="advanced">
+        <summary>Advanced: edit as JSON</summary>
+        <p class="note">The same details as text. Changes here apply when you click <b>Apply JSON</b>.</p>
+        <textarea id="json" spellcheck="false" aria-label="Details as JSON"></textarea>
+        <div class="row center"><button type="button" id="apply-json" class="btn">Apply JSON</button></div>
+      </details>
+    </fieldset>
+
+    <p class="declare">Fields outlined <b class="ok">green</b> on the application form were filled,
+      <b class="bad">red</b> had a problem and <b class="todo">orange</b> are still empty — a panel on the page
+      lists them. Check everything, type the verification code and submit it yourself.</p>
+  </main>
+
+  <footer class="foot">Teletalk Autofill · Not made by or affiliated with Teletalk · Your details never leave this browser</footer>
+</div>
+
+<template id="job-template">
+  <div class="job">
+    <div class="job-head">
+      <span class="num">1</span>
+      <div class="tools">
+        <button type="button" data-act="up" aria-label="Move up" title="Move up">↑</button>
+        <button type="button" data-act="down" aria-label="Move down" title="Move down">↓</button>
+        <button type="button" data-act="remove">Remove</button>
+      </div>
+    </div>
+    <div class="cols" data-fields="job"></div>
+  </div>
+</template>
+
+<script src="lib/lists.js"></script>
+<script src="lib/fields.js"></script>
+<script src="lib/engine.js"></script>
+<script src="options.js"></script>
+</body>
+</html>
