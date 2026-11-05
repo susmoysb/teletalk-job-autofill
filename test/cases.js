@@ -325,6 +325,18 @@ const CASES = [
     panel: { click: 'Edit details in settings', has: /The extension was reloaded: click its toolbar button again/, not: /^$/ },
   },
   {
+    name: '"Clear outlines" takes the colored outlines off the form and keeps the values',
+    panel: { click: 'Clear outlines', has: /Outlines cleared.*\[outlined before:[1-9]\d* after:0\]/, not: /^$/ },
+    expect: { name_en: 'MD. EXAMPLE RAHMAN' },
+  },
+  {
+    name: 'Permanent district list cut down to Rajbari: the panel says why and sends you to Permanent Address',
+    init: () => { window.chrome = { runtime: { sendMessage: async () => true } }; }, // panel buttons need the extension
+    setup: () => { document.querySelector('[name=pm_district]').innerHTML = '<option value="">Select</option><option>Rajbari</option>'; },
+    check: (r) => r.problems.some((p) => p.key === 'permanent.district' && /have: Rajbari/.test(p.error)),
+    panel: { has: /only accepts Rajbari here.*that district.*Fix in settings: Permanent Address/, not: /settings: Address/ },
+  },
+  {
     name: 'Profile without jobs: switch left alone',
     profile: { ...base, jobs: [] },
     expect: { 'has-exp': false, exp1_designation: '' },
@@ -352,8 +364,10 @@ const CASES = [
       const text = await page.evaluate(([r, click]) => {
         globalThis.TAF_ENGINE.showReport(r);
         const root = document.getElementById('taf-panel').shadowRoot;
+        const outlined = () => document.querySelectorAll('[data-taf-outline]').length;
+        const before = outlined();
         if (click) [...root.querySelectorAll('button')].find((b) => b.textContent === click).click();
-        return root.textContent;
+        return `${root.textContent} [outlined before:${before} after:${outlined()}]`;
       }, [report, c.panel.click]);
       if (!c.panel.has.test(text) || c.panel.not.test(text)) errors.push(`panel text: ${text}`);
     }

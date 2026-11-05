@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Teletalk Autofill",
-  "version": "1.14.3",
+  "version": "1.15.1",
   "description": "Unofficial helper: fills Teletalk job application forms from your saved profile in one click. Never submits or pays.",
   "icons": {
     "16": "icons/16.png",

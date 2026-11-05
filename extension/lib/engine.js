@@ -673,9 +673,10 @@
   // --- Summary panel ---
 
   // Where on the settings page a detail is fixed (its section's id there).
-  const SETTINGS_SECTIONS = { uploads: 'Photo & Signature', basic: 'Basic Information', address: 'Address', education: 'Education', jobs: 'Job Experiences' };
+  const SETTINGS_SECTIONS = { uploads: 'Photo & Signature', basic: 'Basic Information', 'present-box': 'Present Address',
+    'permanent-box': 'Permanent Address', education: 'Education', jobs: 'Job Experiences' };
   const settingsSection = (key) => (/^(photo|signature)$/.test(key) ? 'uploads'
-    : /^(present|permanent)\./.test(key) ? 'address'
+    : /^(present|permanent)\./.test(key) ? `${key.split('.')[0]}-box`
       : /^(ssc|hsc|graduation|masters)\./.test(key) ? 'education'
         : /^job\d/.test(key) ? 'jobs' : 'basic');
 
@@ -704,6 +705,19 @@
     } catch (e) {
       lost();
     }
+  }
+
+  // Why a dropdown lacks your answer, where the reason is clear.
+  function problemHint(p, el) {
+    const have = /^no option .*\(have: (.*)\)$/.exec(p.error || '');
+    if (!have) return [];
+    const options = have[1] ? have[1].split(', ') : [];
+    // A district list cut down to a few: the post is for people from those districts.
+    if (/district$/i.test(p.key) && options.length && options.length <= 8) {
+      return [el('div', 'hint', `This form only accepts ${options.join(', ')} here. The post is probably only for applicants from ${options.length > 1 ? 'those districts' : 'that district'}: check the circular.`)];
+    }
+    if (/upazila$/i.test(p.key) && !options.length) return [el('div', 'hint', 'Its list fills in once the district above is chosen.')];
+    return [];
   }
 
   function showReport(r) {
@@ -741,6 +755,9 @@
       .go:hover { background: #134718; }
       .go.edit { background: #fff; color: #1b5e20; border: 1px solid #1b5e20; }
       .go.edit:hover { background: #e8f5e9; }
+      .go.light { background: #fff; color: #444; border: 1px solid #aaa; }
+      .go.light:hover { background: #f2f2f2; }
+      .go:disabled { opacity: .6; cursor: default; }
       .note b { font-weight: 600; }
       .hint { color: #666; font-size: 12px; }`);
     const close = el('button', 'x', '×');
@@ -759,7 +776,7 @@
         : filledKeys.length <= 4 ? el('div', 'ok', `${filled}: ${filledKeys.join(', ')}`) : fold(filled, filledKeys, 'ok'));
     if (r.problems.length) {
       box.append(el('h3', 'bad', `Problems (${r.problems.length}) — red outline, fill by hand`),
-        list(r.problems.map((p) => [el('b', '', p.key), `: ${p.error}`])));
+        list(r.problems.map((p) => [el('b', '', p.key), `: ${p.error}`, ...problemHint(p, el)])));
     }
     if (r.notes.length) {
       box.append(el('h3', 'todo', `Check these (${r.notes.length}) — orange outline`),
@@ -795,12 +812,23 @@
         missing.length <= 4 ? list(missing.map(hint))
         : fold(`${notAsked.length} of your details aren't asked on this page — normal for a step like photo upload`, missing, 'muted'));
     }
-    // Always a way to the settings page, e.g. for a box left empty above.
+    // Always a way to the settings page (e.g. for a box left empty above), and
+    // to take the green/red/orange outlines off the form once checked.
+    const clear = el('button', 'go light', 'Clear outlines');
+    clear.title = 'Remove the colored outlines from the form (the filled values stay)';
+    clear.addEventListener('click', () => {
+      unmarkAll();
+      clear.textContent = 'Outlines cleared';
+      clear.disabled = true;
+    });
+    const actions = el('div', 'fix');
     if (globalThis.chrome && chrome.runtime && chrome.runtime.sendMessage) {
       const edit = el('button', 'go edit', 'Edit details in settings');
       edit.addEventListener('click', () => openSettings(edit));
-      box.append(el('div', 'fix', edit));
+      actions.append(edit);
     }
+    actions.append(clear);
+    box.append(actions);
     box.append(el('div', 'note', toFix.length ? 'After fixing it in settings, click the extension button again on this page. Nothing was submitted.'
       : 'Nothing was submitted. Check the form, fill the captcha and submit it yourself.'));
     root.append(style, box);

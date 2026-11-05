@@ -425,6 +425,11 @@ const diff = (v) => Object.entries(EXPECT).filter(([k, want]) => v[k] !== want).
     buttons === 1 && landed.url === `${a.optionsUrl}#uploads` && landed.flashed && landed.visible && a.ctx.pages().length === tabsBefore,
     JSON.stringify({ buttons, ...landed, tabs: a.ctx.pages().length, tabsBefore }));
   await small.close();
+  // An address problem goes to its own box (Permanent Address), not the top of the address part.
+  await opt.evaluate(() => chrome.runtime.sendMessage({ type: 'open-settings', section: 'permanent-box' }));
+  const atPermanent = await opt.waitForFunction(() => location.hash === '#permanent-box' &&
+    document.getElementById('permanent-box').classList.contains('flash')).then(() => true, () => false);
+  check('"Fix in settings: Permanent Address" lands on the Permanent Address box', atPermanent);
 
   // --- Backup to a fresh browser ---
   const [download] = await Promise.all([opt.waitForEvent('download'), opt.click('#export')]);

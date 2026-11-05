@@ -66,7 +66,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     return;
   }
   if (!msg || msg.type !== 'open-settings') return;
-  const section = /^[a-z]+$/.test(msg.section || '') ? msg.section : '';
+  const section = /^[a-z-]+$/.test(msg.section || '') ? msg.section : '';
   // A settings page already open comes forward instead of a second one opening.
   const open = () => chrome.tabs.create({ url: chrome.runtime.getURL(`options.html${section ? `#${section}` : ''}`), index: sender.tab ? sender.tab.index + 1 : undefined });
   chrome.runtime.sendMessage({ type: 'show-settings', section })
